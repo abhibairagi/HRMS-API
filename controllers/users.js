@@ -13,8 +13,13 @@ exports.createUser = async (req, res) => {
 
 exports.login = async (req , res) => {
     try {
-         res.json(await Users.findByCredentials(req.body.email , req.body.password))
+        const user = await  Users.findByCredentials(req.body.email , req.body.password)
+
+
+
+         res.json(user)
     } catch (error) {
-        consol.log(error)
+        console.log(error)
     }
 }
+

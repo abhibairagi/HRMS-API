@@ -64,11 +64,9 @@ const usersSchema = new mongoose.Schema({
     designation: {
         type: String,
     },
-    tokens: [{
-        token: {
-            type: String
-        }
-    }],
+    tokens: {
+        type : String,
+    },
     status : {
         type : String, 
         default : "active"
@@ -201,7 +199,9 @@ usersSchema.statics.findByCredentials = async (email, password) => {
     const isPasswordMatch = await bcrypt.compare(password, user.password)
     if (!isPasswordMatch) {
         throw new Error({ error: 'Invalid login credentials' })
-    } 
+    }
+    const token = jwt.sign({_id: user._id}, process.env.JWT_KEY)
+    user.tokens = token
     return user
 }
 
