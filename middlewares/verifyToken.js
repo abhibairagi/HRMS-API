@@ -24,10 +24,10 @@ module.exports = {
       // //   logger.info(`Token Expired`);
       //   return res.status(401).send({ message: 'Token expired.' });
       // }
-      const user = await Users.findById(decoded._id).select({'first_name' : 1 , 'role_ID': 1}).exec();
-      const role = await Role.findById(user.role_ID).select('role_name').exec();
+      const user = await Users.findById(decoded._id).select({'first_name' : 1}).exec();
+      // const role = await Role.findById(user.role_ID).select('role_name').exec();
       req.userId = decoded._id;
-      req.roleName = role.role_name;
+      req.roleName = decoded.role_name;
       req.userName = user.first_name;
       next();
     } catch (err) {

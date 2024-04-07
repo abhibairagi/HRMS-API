@@ -29,6 +29,18 @@ const usersSchema = new mongoose.Schema({
     profile_photo: {
         type: String,
     },
+    personal_info : {
+        type : Object, 
+        default : {
+            phone : "", 
+            gender : "", 
+            nationality : "", 
+            martial_status : "", 
+            dob : "", 
+            doj : "",
+            work_location : ""
+        }
+    }, 
     documents : {
         type : Object, 
         default : {}
@@ -204,9 +216,9 @@ usersSchema.statics.findByCredentials = async (email, password) => {
         if (!isPasswordMatch) {
             throw new Error({ error: 'Invalid login credentials' })
         }
-        const token = jwt.sign({_id: user._id}, process.env.JWT_KEY)
         const Role = await Roles.findOne({_id : user.role_ID})
         user.role_ID = Role.role_name
+        const token = jwt.sign({_id: user._id, role_name : Role.role_name}, process.env.JWT_KEY)
         user.tokens = token
         return user
     } catch (error) {
