@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-
 const { ObjectId } = mongoose.Schema;
+const Roles = require("./roles")
 
 const usersSchema = new mongoose.Schema({
     first_name: {
@@ -78,6 +78,9 @@ const usersSchema = new mongoose.Schema({
             phone : "", 
             relation : ""
         }
+    },
+    emp_id : {
+        type  : String,
     }, 
     createdDate: {
         type: Date,
@@ -190,19 +193,27 @@ usersSchema.methods.checkIsCEO = async function() {
 }
 
 usersSchema.statics.findByCredentials = async (email, password) => {
-    // Search for a user by email and password.
-    const user = await Users.findOne({ email: email})
+
+    try {
+        const user = await Users.findOne({ email: email})
    
-    if (!user) {
-        throw new Error({ error: 'Invalid login credentials' })
+        if (!user) {
+            throw new Error({ error: 'Invalid login credentials' })
+        }
+        const isPasswordMatch = await bcrypt.compare(password, user.password)
+        if (!isPasswordMatch) {
+            throw new Error({ error: 'Invalid login credentials' })
+        }
+        const token = jwt.sign({_id: user._id}, process.env.JWT_KEY)
+        const Role = await Roles.findOne({_id : user.role_ID})
+        user.role_ID = Role.role_name
+        user.tokens = token
+        return user
+    } catch (error) {
+        return error.message
     }
-    const isPasswordMatch = await bcrypt.compare(password, user.password)
-    if (!isPasswordMatch) {
-        throw new Error({ error: 'Invalid login credentials' })
-    }
-    const token = jwt.sign({_id: user._id}, process.env.JWT_KEY)
-    user.tokens = token
-    return user
+    // Search for a user by email and password.
+   
 }
 
 const Users = mongoose.model('Users', usersSchema)
