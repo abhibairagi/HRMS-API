@@ -37,6 +37,27 @@ exports.AllUsers = async (req , res) => {
         // }
     ]
 
+
+
+    return res.json(await Users.aggregate(pipeline))
+}
+
+exports.allUsers = async (req , res) => {
+    const pipeline = [
+        {
+            $match :  {
+                "status" : "active"
+            }
+        }, 
+        {
+            $sort : {
+                "personal_info.dob" : 1,
+            }
+        }
+    ]
+
+
+
     return res.json(await Users.aggregate(pipeline))
 }
 
