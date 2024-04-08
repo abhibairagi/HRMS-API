@@ -36,6 +36,7 @@ const companiesSchema = new mongoose.Schema({
     },
     doc: {
         type: Array,
+        default : [],
     },
     createdDate: {
         type: Date,
@@ -47,9 +48,11 @@ const companiesSchema = new mongoose.Schema({
     },
     rejection_flow: {
         type: Object,
+        default : {}
     },
     options: {
-        type: Object
+        type: Object,
+        default : {}
     },
     logo: String,
     info: {

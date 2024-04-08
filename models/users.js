@@ -14,6 +14,9 @@ const usersSchema = new mongoose.Schema({
     password: {
         type: String, 
     },
+    companyId : {
+        type : ObjectId 
+    }, 
     email: {
         type: String,
         required : true, 

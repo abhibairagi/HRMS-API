@@ -24,15 +24,31 @@ module.exports = {
       // //   logger.info(`Token Expired`);
       //   return res.status(401).send({ message: 'Token expired.' });
       // }
-      const user = await Users.findById(decoded._id).select({'first_name' : 1}).exec();
+      const user = await Users.findById(decoded._id).select({ 'first_name': 1, 'companyId': 1 }).exec();
       // const role = await Role.findById(user.role_ID).select('role_name').exec();
       req.userId = decoded._id;
       req.roleName = decoded.role_name;
+      req.companyId = user.companyId;
       req.userName = user.first_name;
       next();
     } catch (err) {
       // logger.error(`Unauthorized - ${err}`);
-      console.log(err , "error")
+      console.log(err, "error")
+      return res.status(401).send({ message: 'Unauthorized.' });
+    }
+  },
+
+  async Admin(req, res, next) {
+
+    try {
+      if (req.roleName !== 'Admin') {
+        return res.status(403).send({ message: 'Oops You are not Admin' });
+      }
+      next();
+
+    } catch (err) {
+      // logger.error(`Unauthorized - ${err}`);
+      console.log(err, "error")
       return res.status(401).send({ message: 'Unauthorized.' });
     }
   }
