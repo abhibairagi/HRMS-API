@@ -26,12 +26,10 @@ const usersSchema = new mongoose.Schema({
         type : Object, 
         default : {}
     } , 
-    profile_photo: {
-        type: String,
-    },
     personal_info : {
         type : Object, 
         default : {
+            profile_photo : "",
             phone : "", 
             gender : "", 
             nationality : "", 
@@ -99,7 +97,7 @@ const usersSchema = new mongoose.Schema({
         required: true,
         default: Date.now
     },
-  })
+  }, {timestamps : true})
 
 usersSchema.pre('save', async function (next) {
     // Hash the password before saving the user model
