@@ -7,6 +7,9 @@ const timeout = require('connect-timeout')
 const axios = require('axios')
 const cron = require('node-cron');
 const userRoutes = require("./routes/users");
+const companyRoutes = require("./routes/companies");
+
+const assetsRoutes = require("./routes/assets");
 
 
 const port = 8000
@@ -33,7 +36,9 @@ app.get('/', (req,res) => {
 
 
 app.use("/users", userRoutes);
- 
+app.use("/assets", assetsRoutes);
+app.use("/companies", companyRoutes);
+
 
 app.listen(port, () => {
     console.log(`server running at port ${port}`)
