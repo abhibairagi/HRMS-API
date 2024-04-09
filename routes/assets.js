@@ -7,12 +7,12 @@ require("../controllers/assets")
 
 router.param("assetsId", getAssetsById);
 
-router.post("/assets/create", createAssets)
+router.post("/create", createAssets)    
 
-router.get("/assets" ,getAllAssets )
-router.get("/assets/:assetsId", getAssets);
+router.get("/allassets" ,getAllAssets )
+router.get("/assetsId/:assetsId", getAssets);
 
-router.put("/assets/update/:assetsId", updateAssets)
+router.put("/update/:assetsId", updateAssets)
 
 // router.delete("/assetsInfo/delete/:assetsInfoId", deleteAssetsInfo )
 
