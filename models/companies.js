@@ -62,7 +62,7 @@ const companiesSchema = new mongoose.Schema({
         email: String,
     },
     holiday_calendar:[{
-        type:holiday_calendar_schema
+        type:holiday_calendar_schema,
     }],
 })
 

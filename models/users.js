@@ -209,7 +209,7 @@ usersSchema.statics.findByCredentials = async (email, password) => {
 
     try {
         const user = await Users.findOne({ email: email})
-   
+        console.log(user, "212")
         if (!user) {
             throw new Error({ error: 'Invalid login credentials' })
         }
