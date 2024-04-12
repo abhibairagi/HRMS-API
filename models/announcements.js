@@ -8,9 +8,12 @@ const announcementSchema = new mongoose.Schema({
     description: {
         type: String,    
     },
-    announcementDate: {
+    closure_date: {
         type: Date,
     },
+    image : {
+        type : String,
+    }, 
     companies: [{type:ObjectId, ref: 'Companies'}]
 
 }, { timestamps: true }

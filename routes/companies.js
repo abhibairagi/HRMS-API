@@ -8,6 +8,6 @@ const {create, getAllCompanies} = require("../controllers/companies")
 
 
 router.post('/create' , verifyToken , Admin ,create)
-router.get('/getcompanies', getAllCompanies)
+router.post('/getcompanies', getAllCompanies)
 
 module.exports = router;
