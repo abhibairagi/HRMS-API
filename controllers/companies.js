@@ -12,3 +12,12 @@ exports.create = async (req , res) => {
     }
 }
 
+exports.getAllCompanies = async(req, res) => {
+    try {
+        const companies = await Companies.find({}, 'company_name')
+        res.json(companies)
+    } catch (error) {
+        console.log(error)
+    }
+    
+  };

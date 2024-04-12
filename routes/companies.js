@@ -4,10 +4,10 @@ const router = express.Router();
 
 const  { verifyToken , Admin} = require("../middlewares/verifyToken")
 
-const {create} = require("../controllers/companies")
+const {create, getAllCompanies} = require("../controllers/companies")
 
 
 router.post('/create' , verifyToken , Admin ,create)
-
+router.get('/getcompanies', getAllCompanies)
 
 module.exports = router;
