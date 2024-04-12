@@ -8,7 +8,7 @@ const axios = require('axios')
 const cron = require('node-cron');
 const userRoutes = require("./routes/users");
 const companyRoutes = require("./routes/companies");
-
+const announcmentsRoutes = require("./routes/announcements")
 const assetsRoutes = require("./routes/assets");
 
 
@@ -38,7 +38,7 @@ app.get('/', (req,res) => {
 app.use("/users", userRoutes);
 app.use("/assets", assetsRoutes);
 app.use("/companies", companyRoutes);
-
+app.use("/announcement", announcmentsRoutes)
 
 app.listen(port, () => {
     console.log(`server running at port ${port}`)
