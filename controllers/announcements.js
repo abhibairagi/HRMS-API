@@ -14,9 +14,7 @@ const Announcements = require("../models/announcements");
 
 exports.createAnnoun = async (req, res) => {
     try {
-        const announ = new Announcements(req.body);
-        const savedAnnoun = await announ.save();
-        res.json(savedAnnoun);
+        res.json(await new Announcements(req.body).save());
     } catch (err) {
         res.status(400).json({
             error: "Unable to post announcement. Please try again"
@@ -43,7 +41,7 @@ exports.getAnnouncements = async (req, res) => {
         const currentDate = new Date();
         const announcements = await Announcements.aggregate([
             {
-                $match: { announcementDate: { $gt: currentDate } }
+                $match: { closure_date: { $gt: currentDate } }
             },
             {
                 $lookup: {
@@ -62,7 +60,7 @@ exports.getAnnouncements = async (req, res) => {
                 $project: {
                     "AnnouncementTitle": "$announcementName",
                     "Description": "$description",
-                    "AnnouncementDate": "$announcementDate",
+                    "closure_date": "$closure_date",
                     "Companies": "$companyNames.company_name"
                 }
             }
