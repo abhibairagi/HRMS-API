@@ -10,6 +10,10 @@ const userRoutes = require("./routes/users");
 const companyRoutes = require("./routes/companies");
 const announcmentsRoutes = require("./routes/announcements")
 const assetsRoutes = require("./routes/assets");
+const workspaceRoutes = require("./routes/work_space");
+const projectsRoutes = require("./routes/projects");
+
+
 
 
 const port = 8000
@@ -39,6 +43,11 @@ app.use("/users", userRoutes);
 app.use("/assets", assetsRoutes);
 app.use("/companies", companyRoutes);
 app.use("/announcement", announcmentsRoutes)
+app.use("/work_space", workspaceRoutes)
+app.use("/projects", projectsRoutes)
+
+
+
 
 app.listen(port, () => {
     console.log(`server running at port ${port}`)
