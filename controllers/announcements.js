@@ -48,20 +48,20 @@ exports.getAnnouncements = async (req, res) => {
                     from: "companies",
                     localField: "companies",
                     foreignField: "_id",
-                    as: "companyNames"
-                }
-            },
-            {
-                $unwind: {
-                    'path': '$companyNames'
+                    pipeline : [{
+                        $project : {
+                            company_name : 1,
+                        }
+                    }],
+                    as: "companydetails"
                 }
             },
             {
                 $project: {
-                    "AnnouncementTitle": "$announcementName",
-                    "Description": "$description",
+                    "announcementName": "$announcementName",
+                    "description": "$description",
                     "closure_date": "$closure_date",
-                    "Companies": "$companyNames.company_name"
+                    "Companies": "$companydetails"
                 }
             }
         ]);
@@ -73,3 +73,36 @@ exports.getAnnouncements = async (req, res) => {
         });
     }
 };
+
+exports.getEventsById = async (req, res, next, id) => {
+    try {
+        const aannoun = await Announcements.findById(id);
+        console.log(aannoun, "43")
+        res.json(aannoun);
+    } catch (err) {
+        res.status(400).json({
+            error: "Unable to fetch aannoun. Please try again"
+        });
+    }
+};
+
+
+  exports.getAannoun = (req, res) => {
+    return res.json(req.aannoun);
+  };
+
+
+exports.updateAnnouncements = async (req, res) => {
+    
+    try {
+        const update = await  Announcements.updateOne({_id : req.params.id}, {
+            $set : { 'announcementName' : req.body.announcementName , 'description' : req.body.description, 
+            'closure_date': req.body.closure_date, 'companies': req.body.companies}
+        })
+
+        res.json(update)
+    } catch (error) {
+        res.json({message  : error.message})
+    }
+  
+  }

@@ -8,7 +8,8 @@ const holiday_calendar_schema = new mongoose.Schema({
     from_date: Date,
     to_date: Date,
     year: String,
-  });
+  })
+
 
 const companiesSchema = new mongoose.Schema({
     company_name: {
