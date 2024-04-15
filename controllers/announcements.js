@@ -48,20 +48,20 @@ exports.getAnnouncements = async (req, res) => {
                     from: "companies",
                     localField: "companies",
                     foreignField: "_id",
-                    as: "companyNames"
-                }
-            },
-            {
-                $unwind: {
-                    'path': '$companyNames'
+                    pipeline : [{
+                        $project : {
+                            company_name : 1,
+                        }
+                    }],
+                    as: "companydetails"
                 }
             },
             {
                 $project: {
-                    "AnnouncementTitle": "$announcementName",
-                    "Description": "$description",
+                    "announcementName": "$announcementName",
+                    "description": "$description",
                     "closure_date": "$closure_date",
-                    "Companies": "$companyNames.company_name"
+                    "Companies": "$companydetails"
                 }
             }
         ]);
@@ -92,54 +92,17 @@ exports.getEventsById = async (req, res, next, id) => {
   };
 
 
-exports.updateEvents = async (req, res) => {
-    const errors = validationResult(req);
-  
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    try {
-      const { eventId } = req.params;
-      console.log(eventId,"103")
-  
+exports.updateAnnouncements = async (req, res) => {
     
-      const event = await Announcements.findById(eventId);
-      if (!event) {
-        return res.status(404).json({ error: 'Event not found' });
-      }
-  
-      const {announcementName, description, companies, closure_date} = req.body
-      console.log(req.body, "111")
-  
-      const updatedEvents = await Announcements.findOneAndUpdate(
-        { _id: eventId },
-        {$set : {announcementName, description, companies, closure_date}},
-        {new: true}
-      )
-  
-      if (!updatedEvents) {
-        return res.status(404).json({ error: 'Events not found' });
-      }
-  
-    //   const deleteEvents = await Announcements.findByIdAndDelete(
-    //     {_id : eventId},)
-  
-  
-      console.log(updatedEvents);
-      res.json(updatedEvents);
-    //   res.json(deleteEvents);
+    try {
+        const update = await  Announcements.updateOne({_id : req.params.id}, {
+            $set : { 'announcementName' : req.body.announcementName , 'description' : req.body.description, 
+            'closure_date': req.body.closure_date, 'companies': req.body.companies}
+        })
+
+        res.json(update)
     } catch (error) {
-      console.error('Error fetching events:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+        res.json({message  : error.message})
     }
   
   }
-
-// exports.updateEvents = async (req, res) => {
-//     const events = req.body 
-
-//     events.save((err, updatedEvents) => {
-//         if (err) handleError(res, "Could not update Category!", 400);
-//     res.json(updatedEvents);
-//     })
-// }

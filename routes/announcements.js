@@ -2,15 +2,15 @@ const express = require("express");
 
 const router = express.Router();
 
-const {createAnnoun, getAnnouncements, getEventsById, updateEvents, getAannoun} = 
+const {createAnnoun, getAnnouncements, getEventsById, updateAnnouncements, getAannoun} = 
 require("../controllers/announcements")
 
-router.param("eventId", getEventsById);
+// router.param("eventId", getEventsById);
 
 
 router.post("/create", createAnnoun)
 router.get("/ongoing", getAnnouncements)
 router.get("/eventId/:eventId", getAannoun);
-router.put("/editEvents/:eventId", updateEvents)
+router.put("/update/:id", updateAnnouncements)
 
 module.exports = router;
