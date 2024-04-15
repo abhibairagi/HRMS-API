@@ -1,6 +1,6 @@
 const express = require("express")
 const WorkSpace = require("../models/work_space")
-const Project = require("../models/projects")
+const Board = require("../models/boards")
 const mongoose = require("mongoose")
 const {ObjectId} = require("mongoose")
 
@@ -22,6 +22,7 @@ exports.CreateWorkSpace = async (req, res) => {
 
             const baseTemplate = {
                 group_name: "Test",
+                group_number : 0,
                 tasks: [{
                     name: "Test",
                     description: "",
@@ -29,6 +30,7 @@ exports.CreateWorkSpace = async (req, res) => {
                     user_access: [req.userId],
                     assigned_to : "",
                     sub_tasks: [],
+                    task_number : 0,
                     files: [],
                     timeline: {
                         from: "",
@@ -42,7 +44,7 @@ exports.CreateWorkSpace = async (req, res) => {
                 work_space : newWorkSpace._id
             }
 
-            const createdproject = await new Project(baseTemplate).save()
+            const createdproject = await new Board(baseTemplate).save()
 
         } else {
             return res.json({ message: "You are Manager or not to create WorkSpace" })
