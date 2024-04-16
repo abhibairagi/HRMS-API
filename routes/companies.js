@@ -4,7 +4,7 @@ const router = express.Router();
 
 const  { verifyToken , Admin} = require("../middlewares/verifyToken")
 
-const {create, getAllCompanies, getCompaniesById, holidayCalender} = require("../controllers/companies")
+const {create, getAllCompanies, getCompaniesById, holidayCalender, getAllHolidays} = require("../controllers/companies")
 
 
 // router.param("companyId", getCompaniesById);
@@ -12,5 +12,6 @@ const {create, getAllCompanies, getCompaniesById, holidayCalender} = require("..
 router.post('/create' , verifyToken , Admin ,create)
 router.post('/getcompanies', getAllCompanies)
 router.put('/holidaycalender/:id', holidayCalender)
+router.get('/allholidays', getAllHolidays)
 
 module.exports = router;

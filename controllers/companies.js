@@ -47,3 +47,53 @@ exports.holidayCalender = async (req, res) => {
 
     }
 }
+
+exports.getAllHolidays = async (req, res) => {
+    try {
+        const holidays = await Companies.find();
+        console.log(holidays, "18")
+        res.json(holidays[0].holiday_calendar);
+    } catch (err) {
+        res.status(400).json({
+            error: "Unable to fetch assets. Please try again"
+        });
+    }
+};
+
+// exports.getAllHolidayCalender = async (req, res) => {
+//     try {
+//         // const currentDate = new Date();
+//         const holiday = await Companies.aggregate([
+//             // {
+//             //     $match: { closure_date: { $gt: currentDate } }
+//             // },
+//             {
+//                 $lookup: {
+//                     from: "companies",
+//                     localField: "companies",
+//                     foreignField: "_id",
+//                     pipeline : [{
+//                         $project : {
+//                             company_name : 1,
+//                         }
+//                     }],
+//                     as: "companydetails"
+//                 }
+//             },
+//             {
+//                 $project: {
+//                     "announcementName": "$announcementName",
+//                     "description": "$description",
+//                     "closure_date": "$closure_date",
+//                     "Companies": "$companydetails"
+//                 }
+//             }
+//         ]);
+        
+//         res.json(announcements);
+//     } catch (err) {
+//         res.status(400).json({
+//             error: "Unable to fetch announcements. Please try again"
+//         });
+//     }
+// };
