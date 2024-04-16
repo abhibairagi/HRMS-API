@@ -14,7 +14,8 @@ const projectsSchema = new mongoose.Schema({
         sub_tasks: [{
             priority: String,
             user_access: Array,
-            owner: String, 
+            owner: String,
+            task_number : Number,
             completionDate: String,
             chats: [{
                 userId: String,
@@ -22,6 +23,7 @@ const projectsSchema = new mongoose.Schema({
                 date: Date,
             }]
         }],
+        task_number : Number,
         files: Array,
         timeline: Object,
         owner: String,
@@ -34,6 +36,7 @@ const projectsSchema = new mongoose.Schema({
         }],
         created: Date
     }],
+    group_number : Number,
     work_space: {
         type: ObjectId
     }
@@ -43,4 +46,4 @@ const projectsSchema = new mongoose.Schema({
 
 
 
-module.exports = mongoose.model("projects", projectsSchema);
+module.exports = mongoose.model("boards", projectsSchema);
