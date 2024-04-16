@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const  { verifyToken } = require("../middlewares/verifyToken")
 
-const {  addgroups , addTaskTogroup , getAllTaskforWorkSpace} = require("../controllers/projects")
+const {  addgroups , addTaskTogroup , getAllTaskforWorkSpace} = require("../controllers/boards")
 
 
 router.post('/addgroup/:id' , verifyToken , addgroups)

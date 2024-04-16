@@ -13,6 +13,14 @@ const workSpaceSchema = new mongoose.Schema({
     }], 
     name : {
         type : String,
+    }, 
+    is_deleted : {
+        type : Boolean, 
+        default : false
+    }, 
+    archive : {
+        type : Boolean, 
+        default  : false
     }
 
 }, { timestamps: true }
