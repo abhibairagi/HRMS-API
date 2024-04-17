@@ -1,6 +1,6 @@
 const express = require("express")
 const Companies = require("../models/companies")
-
+const mongoose = require('mongoose')
 
 exports.create = async (req, res) => {
     try {
@@ -48,52 +48,41 @@ exports.holidayCalender = async (req, res) => {
     }
 }
 
-exports.getAllHolidays = async (req, res) => {
-    try {
-        const holidays = await Companies.find();
-        console.log(holidays, "18")
-        res.json(holidays[0].holiday_calendar);
-    } catch (err) {
-        res.status(400).json({
-            error: "Unable to fetch assets. Please try again"
-        });
-    }
-};
-
-// exports.getAllHolidayCalender = async (req, res) => {
+// exports.getAllHolidays = async (req, res) => {
 //     try {
-//         // const currentDate = new Date();
-//         const holiday = await Companies.aggregate([
-//             // {
-//             //     $match: { closure_date: { $gt: currentDate } }
-//             // },
-//             {
-//                 $lookup: {
-//                     from: "companies",
-//                     localField: "companies",
-//                     foreignField: "_id",
-//                     pipeline : [{
-//                         $project : {
-//                             company_name : 1,
-//                         }
-//                     }],
-//                     as: "companydetails"
-//                 }
-//             },
-//             {
-//                 $project: {
-//                     "announcementName": "$announcementName",
-//                     "description": "$description",
-//                     "closure_date": "$closure_date",
-//                     "Companies": "$companydetails"
-//                 }
-//             }
-//         ]);
-        
-//         res.json(announcements);
+//         const holidays = await Companies.find();
+//         console.log(holidays, "18")
+//         res.json(holidays[0].holiday_calendar);
 //     } catch (err) {
 //         res.status(400).json({
-//             error: "Unable to fetch announcements. Please try again"
+//             error: "Unable to fetch assets. Please try again"
 //         });
 //     }
 // };
+
+exports.getAllHolidayCalender = async (req, res) => {
+    try {
+        // const currentDate = new Date();
+
+        const companyId = new mongoose.Types.ObjectId(req.params.id);
+        const holiday = await Companies.aggregate([
+            {
+                $match: { '_id': companyId }
+            },
+            {
+                $project: { _id: 0, holiday_calendar: 1 }
+            },
+            {
+                $unwind: "$holiday_calendar"
+            }
+        ]);
+
+
+
+        console.log(holiday)
+
+        res.json(holiday);
+    } catch (err) {
+        res.json({ message: err.message })
+    }
+};
