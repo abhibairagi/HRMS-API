@@ -12,7 +12,7 @@ const announcmentsRoutes = require("./routes/announcements")
 const assetsRoutes = require("./routes/assets");
 const workspaceRoutes = require("./routes/work_space");
 const boardRoutes = require("./routes/boards");
-
+const assetsInfoRoutes = require("./routes/assetsInfo")
 
 
 
@@ -45,7 +45,7 @@ app.use("/companies", companyRoutes);
 app.use("/announcement", announcmentsRoutes)
 app.use("/work_space", workspaceRoutes)
 app.use("/boards", boardRoutes)
-
+app.use("/assetsInfo", assetsInfoRoutes)
 
 
 
