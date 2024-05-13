@@ -66,7 +66,8 @@ exports.getAllWorkspace = async (req , res) => {
             {
                 $project : {
                     "type" : "full_access",
-                    "name" : 1 
+                    "name" : 1,
+                    "board_type" : "kanban",
                 }
             }
         ])
@@ -80,7 +81,8 @@ exports.getAllWorkspace = async (req , res) => {
             {
                 $project : {
                     "type" : "restricted_access",
-                    "name" : 1 
+                    "name" : 1 ,
+                    "board_type" : "kanban",
                 }
             }
         ])
