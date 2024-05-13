@@ -3,6 +3,8 @@ const boards = require("../models/boards")
 const WorkSpace = require("../models/work_space")
 const mongoose = require("mongoose")
 const { ObjectId } = require("mongoose")
+const _ = require("lodash");
+
 
 exports.addgroups = async (req, res) => {
     try {
@@ -117,31 +119,113 @@ exports.addSubTask = async (req, res) => {
 exports.getAllTaskforWorkSpace = async (req, res) => {
     try {
         if (req.body.type == 'full_access') {
-            const pipeline = [
-                {
-                    $match: {
-                        work_space: new mongoose.Types.ObjectId(req.body._id)
-                    }
-                },
-                { $unwind: "$tasks" },
-                { $sort: { "tasks.task_number": 1 } },
-                {
-                    $group: {
-                        _id: "$_id",
-                        group_name: { $first: "$group_name" },
-                        work_space: { $first: "$work_space" },
-                        createdAt: { $first: "$createdAt" },
-                        updatedAt: { $first: "$updatedAt" },
-                        __v: { $first: "$__v" },
-                        group_number: { $first: "$group_number" },
-                        tasks: { $push: "$tasks" }
-                    }
-                },
-                { $sort: { group_number: 1 } }
-            ]
 
-            res.json(await boards.aggregate(pipeline))
+            if (req.body.board_type == 'Table') {
+                const TablePipeline = [
+                    {
+                        $match: {
+                            work_space: new mongoose.Types.ObjectId(req.body._id)
+                        }
+                    },
+                    { $unwind: "$tasks" },
+                    { $sort: { "tasks.task_number": 1 } },
+                    {
+                        $group: {
+                            _id: "$_id",
+                            group_name: { $first: "$group_name" },
+                            work_space: { $first: "$work_space" },
+                            createdAt: { $first: "$createdAt" },
+                            updatedAt: { $first: "$updatedAt" },
+                            __v: { $first: "$__v" },
+                            group_number: { $first: "$group_number" },
+                            tasks: { $push: "$tasks" }
+                        }
+                    },
+                    { $sort: { group_number: 1 } }
+                ]
+                res.json(await boards.aggregate(TablePipeline))
+            }
+
+            if (req.body.board_type == 'kanban') {
+                const KanbanPipeline = [
+                    {
+                        $match: {
+                            work_space: new mongoose.Types.ObjectId(req.body._id)
+                        }
+                    },
+                    { $unwind: "$tasks" },
+                    {
+                        $group: {
+                            _id: "$tasks.status",
+                            tasks: {
+                                $push: {
+                                    _id: "$tasks._id",
+                                    name: "$tasks.name",
+                                    description: "$tasks.description",
+                                    priority: "$tasks.priority",
+                                    status: "$tasks.status",
+                                    groupId: "$_id"
+                                }
+                            }
+                        }
+                    },
+
+                ]
+                var tasks = await boards.aggregate(KanbanPipeline)
+
+
+                const sortOrder = ['New', 'Working', 'Hold', 'Completed'];
+                const sortedData = tasks.sort((a, b) => {
+                    return sortOrder.indexOf(a._id) - sortOrder.indexOf(b._id);
+                });
+                
+
+                res.json(sortedData)
+
+            }
+
+            if (req.body.board_type == 'calendar') {
+                const CalendarPipeline = [
+                    {
+                        $match: {
+                            work_space: new mongoose.Types.ObjectId(req.body._id)
+                        }
+                    },
+                    { $unwind: "$tasks" },
+                    {
+                        $group: {
+                            _id: "$tasks.status",
+                            tasks: {
+                                $push: {
+                                    _id: "$tasks._id",
+                                    name: "$tasks.name",
+                                    description: "$tasks.description",
+                                    priority: "$tasks.priority",
+                                    status: "$tasks.status",
+                                    groupId: "$_id"
+                                }
+                            }
+                        }
+                    },
+
+                ]
+
+                res.json(await boards.aggregate(CalendarPipeline))
+            }
         }
+        else {
+            return res.json({ message: "This only for Full Task" })
+        }
+
+
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+exports.getRestrictedTask = async (req, res) => {
+    try {
         if (req.body.type == 'restricted_access') {
             const pipeline = [
                 {
@@ -169,17 +253,29 @@ exports.getAllTaskforWorkSpace = async (req, res) => {
                         __v: { $first: "$__v" },
                         group_number: { $first: "$group_number" },
                     }
-                }, 
+                },
                 { $sort: { group_number: 1 } }
             ]
 
             res.json(await boards.aggregate(pipeline))
         }
+    } catch (error) {
+        console.log(error)
+    }
+}
 
+
+exports.updateTaskStatus = async (req, res) => {
+    try {
+
+        await boards.updateOne({ _id: req.body.groupId, "tasks._id": req.body._id },
+            { $set: { "tasks.$.status": req.body.status } }
+        )
+
+        res.json({message : "Updated"})
 
 
     } catch (error) {
         console.log(error)
     }
 }
-
