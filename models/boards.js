@@ -9,8 +9,10 @@ const projectsSchema = new mongoose.Schema({
         name: String,
         description: String,
         priority: String,
+        status : String,
         user_access: Array, 
         assigned_to : String,
+        due_date : Date,
         sub_tasks: [{
             priority: String,
             user_access: Array,
