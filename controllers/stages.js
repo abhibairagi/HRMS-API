@@ -15,7 +15,7 @@ exports.create = async (req, res) => {
 
 exports.findStage = async (req, res) => {
     try {
-        const AllStages = await Stages.find({stage_type : req.params.stage_type}).exec()
+        const AllStages = await Stages.findOne({stage_type : req.params.stage_type}).exec()
         res.json(AllStages)
     } catch (error) {
         console.log(error)
