@@ -10,6 +10,8 @@ module.exports = {
   async verifyToken(req, res, next) {
     const header = req.headers.authorization;
 
+    console.log(req.headers, "Header")
+
     if (!header) {
       // logger.info(`No Token Provided`);
       return res.status(403).send({ message: 'No token provided.' });
