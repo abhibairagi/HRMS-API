@@ -13,6 +13,24 @@ exports.createAssetsInfo = async(req, res) => {
       }  
   };
 
+  exports.getassetCategory = async (req, res) => {
+    try {
+      const category = await AssetsInfo.aggregate([
+        {
+          $project: { _id: 0, asset_category: 1}
+        },
+      //   {
+      //     $unwind: "$asset_category"
+      // }
+      ])
+
+      res.json(category);
+
+    }catch (err) {
+      res.json({message  : err.message})
+    }
+  }
+
 // exports.getAllAssetsInfo = (req, res) => {
 //     AssetsInfo.find().exec((err, assestsInfo) => {
 //       if (err) {
