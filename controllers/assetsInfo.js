@@ -19,9 +19,7 @@ exports.createAssetsInfo = async(req, res) => {
         {
           $project: { _id: 0, asset_category: 1}
         },
-      //   {
-      //     $unwind: "$asset_category"
-      // }
+      
       ])
 
       res.json(category);
