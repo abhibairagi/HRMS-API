@@ -5,7 +5,7 @@ const assetsInfoSchema = new mongoose.Schema(
     asset_type: {
       type: String,
     },
-    asset_category: {
+    asset_category: { 
       type: String,
       // unique: true,
     },
