@@ -12,8 +12,13 @@ const announcmentsRoutes = require("./routes/announcements");
 const assetsRoutes = require("./routes/assets");
 const workspaceRoutes = require("./routes/work_space");
 const boardRoutes = require("./routes/boards");
+const fs = require("fs");
+const Users = require("./models/users");
+const configurationRoutes = require("./routes/configuration");
 const stageRoutes = require("./routes/stages");
-
+const redis = require("ioredis");
+const assetsInfoRoutes = require("./routes/assetsInfo");
+const redisRoutes = require("./routes/redis");
 const port = 8000;
 const app = express();
 
@@ -21,6 +26,7 @@ mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("database connected"));
@@ -45,7 +51,10 @@ app.use("/companies", companyRoutes);
 app.use("/announcement", announcmentsRoutes);
 app.use("/work_space", workspaceRoutes);
 app.use("/boards", boardRoutes);
+app.use("/config", configurationRoutes);
 app.use("/stages", stageRoutes);
+app.use("/assetsInfo", assetsInfoRoutes);
+// app.use("/redis", redisRoutes);
 
 app.listen(port, () => {
   console.log(`server running at port ${port}`);

@@ -1,98 +1,75 @@
 const AssetsInfo = require("../models/assetsInfo");
 
-exports.createAssetsInfo = async(req, res) => {
-    try {
-        const assestsInfo = new AssetsInfo(req.body);
-        console.log(assestsInfo, "6")
+exports.createAssetsInfo = async (req, res) => {
+  try {
+    const assestsInfo = new AssetsInfo(req.body);
+    console.log(assestsInfo, "6");
 
-        const savedAssestsInfo = await assestsInfo.save();
-        console.log(savedAssestsInfo, "8")
-        res.json(savedAssestsInfo);
-      } catch (err) {
-        res.json({ message: err.message })
-      }  
-  };
-
-  exports.getassetCategory = async (req, res) => {
-    try {
-      const category = await AssetsInfo.aggregate([
-        {
-          $project: { _id: 0, asset_category: 1}
-        },
-      
-      ])
-
-      res.json(category);
-
-    }catch (err) {
-      res.json({message  : err.message})
-    }
+    const savedAssestsInfo = await assestsInfo.save();
+    console.log(savedAssestsInfo, "8");
+    res.json(savedAssestsInfo);
+  } catch (err) {
+    res.json({ message: err.message });
   }
+};
 
-// exports.getAllAssetsInfo = (req, res) => {
-//     AssetsInfo.find().exec((err, assestsInfo) => {
-//       if (err) {
-//         return res.status(400).json({
-//             err: "No asset Information found"
-//         })
-//       }
-//       res.json(assestsInfo)
-//     });
-//   };
+exports.getassetCategory = async (req, res) => {
+  try {
+    const category = await AssetsInfo.aggregate([
+      {
+        $match: {
+          $and: [
+            { asset_category: { $ne: "" } },
+            { asset_category: { $ne: null } },
+            { asset_category: { $ne: undefined } },
+          ],
+        },
+      },
+      {
+        $group: {
+          _id: "$asset_category",
+          // asset_ids: { $push: "$_id" }  // Push all _id values into an array for each asset_category
+        },
+      },
+    ]);
 
-//   exports.getAssetsInfoById = (req, res, next, id) => {
-//     AssetsInfo.findById(id, (err, assestsInfo) => {
-//       if (err || !assestsInfo) {
-//         return res.status(400).json({
-//             err: "No assets with that ID"
-//         })
-//       }
-//       req.assestsInfo = assestsInfo;
-//       next();
-//     });
-//   };
+    res.json(category);
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+};
 
-//   exports.getAssetsInfo = (req, res) => {
-//     return res.json(req.assestsInfo);
-//   };
+exports.getassetTypes = async (req, res) => {
+  try {
+    const types = await AssetsInfo.aggregate([
+      {
+        $match: { asset_category: req.body._id },
+      },
+    ]);
 
-//   exports.updateAssetsInfo = (req, res) => {
-//     const assestsInfo = req.assestsInfo;
-//     console.log(assestsInfo, "44")
-//     assestsInfo.asset_name = req.body.asset_name;
-//     console.log(assestsInfo.asset_name, "46")
-  
-//     assestsInfo.save((err, updatedAssetInfo) => {
-//       if (err) {
-//         return res.status(400).json({
-//             err: "Unable to update Asset Info"
-//         })
-//       }
-//       res.json(updatedAssetInfo);
-//     });
-//   };
+    res.json(types);
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+};
 
-
-// exports.deleteAssetsInfo = (req, res) => {
-//     const {assetsInfoId} = req.params
-//     console.log(assetsInfoId, "73")
-  
-//     AssetsInfo.findByIdAndDelete(
-//       { _id: assetsInfoId},
-//       (err, assestsInfo) => {
-//         console.log(assestsInfo, "168")
-//       if (err) {
-//         console.error('Error updating trip:', err);
-//         return res.status(404).json({
-//           error: 'Could not update the Offer',
-//         });
-//       }
-//       if (!assestsInfo) {
-//         return res.status(404).json({
-//           error: 'Offer not found .',
-//         });
-//       }
-//       res.json(`Deleted ${assestsInfo.asset_name} successfully`)
-//       console.log(assestsInfo)
-//     });
-//   };
+exports.getallAssets = async (req, res) => {
+  try {
+    const assets = await AssetsInfo.find({
+      // {
+      //   $project: {
+      //     "asset_type": "$asset_type",
+      //     "asset_category": "$asset_category",
+      //     "uniqueID" : "$asset_uniq_id",
+      //     "key_name" : "$asset_keys.key_name",
+      //     "key_value" : "$asset_keys.key_value",
+      //     "key_type" : "$asset_keys.key_type",
+      //     "options": "$asset_keys.options"
+      //   }
+      // }
+    });
+    res.json(assets);
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+};

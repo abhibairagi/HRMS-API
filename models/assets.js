@@ -1,72 +1,49 @@
 const mongoose = require("mongoose");
 const crypto = require("crypto");
+const { ObjectId } = mongoose.Schema
+
 // const uuidv1 = require("uuid/v1");
 
 const assetsSchema = new mongoose.Schema(
   {
     asset_history: {
       type: Array,
+      default : [],
     },
     asset_notes: {
       type: Array,
+      default : []
     },
     attachments: {
       type: Array,
-      
+      default : []
     },
-    internal_inventory_id: {
-        type: String,    
-    },
+    // internal_inventory_id: {
+    //     type: String,    
+    // },
     asset_info_id: {
-        type: String,    
+        type: ObjectId,
+        ref: "assetsInfo",    
+        required : true
     },
     associated_user_id: {
-        type: String,    
+        type: String, 
+        default : ""   
     },
     status: {
-        type: String,    
+        type: String,  
+        default : ""  
     },
     asset_location: {
         type: String,    
+        default : ""  
     },
     purchase_date: {
-        type: String,    
+        type: Date,      
     },
     asset_info: {
-        type: Object,
-        description: {
-            type: String,
-        },
-        category: {
-            type: String,
-        },
-        size: {
-            type: String,
-        },
-        serial_number: {
-            type: String,
-        },
-        model_number: {
-            type: String,
-        },
-        manufacture: {
-            type: String,
-        },
-        warranty_info: {
-            type: String,
-        }, 
-        warranty_expiry: {
-            type: String,
-        }, 
-        purchased_info: {
-            type: String,
-        }, 
-        cost: {
-            type: String,
-        }, 
-        old_ref_id: {
-            type: String,
-        },
+        type : Object ,
+        default : {}
     },
     
   },

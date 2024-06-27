@@ -5,10 +5,9 @@ exports.createAssets = async(req, res) => {
     const assests = new Assets(req.body);
     const savedAssests = await assests.save();
     res.json(savedAssests);
+    console.log(savedAssests, "9")
   } catch (err) {
-    res.status(400).json({
-    error: "Unable to post assets. Please try again"
-    });
+    res.json({message  : err.message})
   }  
 };
 
