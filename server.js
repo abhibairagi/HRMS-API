@@ -20,6 +20,7 @@ const redis = require("ioredis");
 const assetsInfoRoutes = require("./routes/assetsInfo");
 const redisRoutes = require("./routes/redis");
 const onboardings = require("./routes/onboardings");
+const offboardings = require("./routes/offboardings");
 const port = 8000;
 const app = express();
 
@@ -57,6 +58,7 @@ app.use("/stages", stageRoutes);
 app.use("/assetsInfo", assetsInfoRoutes);
 app.use("/redis", redisRoutes);
 app.use("/onboardings", onboardings);
+app.use("/offboardings", offboardings);
 
 app.listen(port, () => {
   console.log(`server running at port ${port}`);

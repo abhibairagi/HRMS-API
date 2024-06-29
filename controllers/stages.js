@@ -25,7 +25,8 @@ exports.updateOne = async (req, res) => {
   try {
     const result = await Stages.updateOne(
       {
-        _id: "6642228ae538b95c2b03bc41",
+        // _id: "6642228ae538b95c2b03bc41",
+        _id: new mongoose.Types.ObjectId(req.body._id),
         "steps._id": new mongoose.Types.ObjectId(req.body.steps[0]._id),
       },
       {

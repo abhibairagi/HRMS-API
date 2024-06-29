@@ -1,9 +1,11 @@
 const express = require("express");
+
 const router = express.Router();
-const { create, getOnboarding } = require("../controllers/onboardings");
+
 const { verifyToken } = require("../middlewares/verifyToken");
 
-router.post("/create", create);
-router.get("/getonboarding", getOnboarding);
+const { createOffboarding } = require("../controllers/offboardings");
+
+router.post("/create", verifyToken, createOffboarding);
 
 module.exports = router;

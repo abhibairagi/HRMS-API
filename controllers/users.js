@@ -59,6 +59,15 @@ exports.login = async (req, res) => {
   }
 };
 
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await Users.find({}, "first_name");
+    res.json(users);
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+};
+
 exports.AllUsers = async (req, res) => {
   var match = {
     $match: {

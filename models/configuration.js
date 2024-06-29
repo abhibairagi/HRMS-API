@@ -9,6 +9,9 @@ const configurationSchema = new mongoose.Schema(
     policies: {
       type: Array,
     },
+    shifts: {
+      type: Array,
+    },
   },
   { timestamps: true }
 );
