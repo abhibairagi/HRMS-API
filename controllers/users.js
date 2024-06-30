@@ -61,7 +61,13 @@ exports.login = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await Users.find({}, "first_name");
+    const users = await Users.aggregate([
+      {
+        $project: {
+          full_name: { $concat: ["$first_name", " ", "$last_name"] },
+        },
+      },
+    ]);
     res.json(users);
   } catch (err) {
     res.json({ message: err.message });

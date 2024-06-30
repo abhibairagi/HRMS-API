@@ -21,6 +21,8 @@ const assetsInfoRoutes = require("./routes/assetsInfo");
 const redisRoutes = require("./routes/redis");
 const onboardings = require("./routes/onboardings");
 const offboardings = require("./routes/offboardings");
+const userShifts = require("./routes/userShift");
+const attendance = require("./routes/attendance");
 const port = 8000;
 const app = express();
 
@@ -59,6 +61,8 @@ app.use("/assetsInfo", assetsInfoRoutes);
 app.use("/redis", redisRoutes);
 app.use("/onboardings", onboardings);
 app.use("/offboardings", offboardings);
+app.use("/userShifts", userShifts);
+app.use("/attendance", attendance);
 
 app.listen(port, () => {
   console.log(`server running at port ${port}`);
